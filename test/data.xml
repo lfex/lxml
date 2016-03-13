@@ -1,0 +1,17 @@
+<life>
+  <bacteria division="domain">
+    <bacterium>spirochetes</bacterium>
+    <bacterium>proteobacteria</bacterium>
+    <bacterium>cyanobacteria</bacterium>
+  </bacteria>
+  <archaea division="domain">
+    <archaum></archaum>
+  </archaea>
+  <eukaryota division="domain">
+    <eukaryotum>slime molds</eukaryotum>
+    <eukaryotum>fungi</eukaryotum>
+    <eukaryotum>plants</eukaryotum>
+    <eukaryotum>animals</eukaryotum>
+  </eukaryota>
+</life>
+
