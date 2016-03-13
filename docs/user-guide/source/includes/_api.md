@@ -16,7 +16,7 @@ will first need to call ``start``.
 ## ``parse``
 
 > For this and subsequent API functions, we will use the following
-sample data, assumed to be saved to ``./data.xml``:
+sample data, part of the lxml codebase and available in ``./test/data.xml``:
 
 ```xml
 <life>
@@ -40,7 +40,7 @@ sample data, assumed to be saved to ``./data.xml``:
 > Parse the data normally:
 
 ```cl
-> (lxml:parse #(file "data.xml"))
+> (lxml:parse #(file "test/data.xml"))
 (#(tag "life")
  #(attr ())
  #(content
