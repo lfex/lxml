@@ -38,7 +38,7 @@ Just add it to your ``rebar.config`` deps:
 ```erlang
   {deps, [
     ...
-    {lxml, ".*", {git, "git@github.com:oubiwann/lxml.git", "master"}},
+    {lxml, ".*", {git, "git@github.com:lfex/lxml.git", {tag, "x.y.z"}}},
     ...]}.
 ```
 
@@ -51,10 +51,13 @@ Or, if you use ``lfe.config``:
 And then do the usual:
 
 ```bash
-    $ make compile
+    $ rebar3 compile
 ```
 
 
 ## Usage [&#x219F;](#table-of-contents)
 
-Usage information is provided on the [documentation site](http://oubiwann.github.io/lxml/).
+Usage information is provided in the documentation:
+
+* [User Guide](http://lfex.github.io/lxml/current/user-guide)
+* [API Reference](http://lfex.github.io/lxml/current/api)

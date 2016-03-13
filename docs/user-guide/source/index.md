@@ -2,7 +2,7 @@
 title: lxml Library Reference
 
 language_tabs:
-  - 
+  -
 
 toc_footers:
   - <a href='http://githug.com/oubiwann/lxml/'>View the source</a>
@@ -13,6 +13,7 @@ includes:
   - wrapping
   - api
   - namespaces
+  - versions
 
 search: true
 ---
