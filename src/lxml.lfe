@@ -2,7 +2,6 @@
   (export all))
 
 (include-lib "clj/include/compose.lfe")
-(include-lib "lxml/include/xml.lfe")
 
 ;;; API functions
 
