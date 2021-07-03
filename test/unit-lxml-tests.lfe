@@ -49,7 +49,8 @@
 ;;; actual tests
 
 (deftest get-data
-  (is-equal "some content" (lxml:get-data (test-data-0))))
+  (is-equal "some content"
+            (lxml:get-data (proplists:get_value 'body (test-data-0)))))
 
 (deftest find-content
   (is-equal "Fairville" (lxml:find-content 'city (test-data-1)))
@@ -58,15 +59,15 @@
 
 (deftest get-content-in-3tuple
   (is-equal "thing"
-            (lxml:get-content-in-3tuple '(level1-1) (test-data-2)))
+            (lxml:get-content '(level1-1) (test-data-2)))
   (is-equal "brother"
-            (lxml:get-content-in-3tuple '(level1-3 level2-3)
+            (lxml:get-content '(level1-3 level2-3)
                                              (test-data-2)))
   (is-equal "bit"
-            (lxml:get-content-in-3tuple '(level1-3 level2-2 level3-2)
+            (lxml:get-content '(level1-3 level2-2 level3-2)
                                              (test-data-2)))
   (is-equal "hat"
-            (lxml:get-content-in-3tuple
+            (lxml:get-content
               '(level1-3 level2-2 level3-1 level4-3)
               (test-data-2))))
 
