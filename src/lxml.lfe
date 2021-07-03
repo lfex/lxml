@@ -1,12 +1,13 @@
 (defmodule lxml
   (export all))
 
-(include-lib "clj/include/compose.lfe")
-
 ;;; API functions
 
 (defun start ()
-  (++ (lhc:start) `(#(lxml ok))))
+  (inets:start))
+
+(defun stop ()
+  (inets:stop))
 
 (defun parse (arg)
   (parse arg '()))
@@ -18,7 +19,7 @@
       (parse-body data options))
      (x x)))
   ((`#(url ,url) options)
-   (parse-body (lhc:get url) options))
+   (parse-body (http-get url) options))
   ((data options)
    (parse-body data options)))
 
@@ -62,12 +63,12 @@
             rest-keys
             (element 2 (lists:keyfind first-key 1 data)))))))
 
-(defun get-parent-in
+(defun get-parent-in ()
   ;; XXX use this for get-attr-in as well as get-linked (in other words,
   ;; generalize th code in get-linked and move it here
   'noop)
 
-(defun get-attr-in
+(defun get-attr-in ()
   'noop)
 
 (defun get-content (keys data)
@@ -101,7 +102,20 @@
   (let* ((`(,all-but-last ,last) (lxml-util:rdecons keys))
          (link-data (get-in all-but-last data))
          (url (find-link last link-data)))
-    (lhc:get url (++ '(#(endpoint false)) options))))
+    (http-get url (++ '(#(endpoint false)) options))))
+
+(defun http-get (url)
+  (http-get url '() '()))
+
+(defun http-get (url opts)
+  (http-get url
+            (proplists:get_value 'httpc-options opts '())
+            (proplists:get_value 'http-options opts '())))
+
+(defun http-get (url http-options options)
+  (case (httpc:request 'get `#(,url ()) http-options options)
+    (`#(ok #(,status ,headers ,body)) body)
+    (err err)))
 
 (defun get-link-in-3tuple (keys data)
   (lists:foldl #'find-link/2 data keys))
@@ -153,16 +167,22 @@
      #(tail ,tail))))
 
 (defun parse-body-to-atoms (xml)
-  (->> xml
-       (parse-body-raw)
-       (parse-body-shaped)
-       (convert-keys)))
+  (clj:->> xml
+           (parse-body-raw)
+           (parse-body-shaped)
+           (convert-keys)))
 
 (defun convert-keys (data)
   "Convert property list keys to atoms."
-  (lxml:map #'list_to_atom/1 #'key->atom/1 #'lxml:ident/1 data))
+  (lxml:map #'list_to_atom/1 #'key->atom/1 #'ident/1 data))
 
 (defun key->atom
   ((`#(,key ,val)) (when (is_list key))
    `#(,(list_to_atom key) ,val))
   ((x) x))
+
+(defun version ()
+  (lxml-util:version))
+
+(defun versions ()
+  (lxml-util:versions))
