@@ -11,13 +11,12 @@
 
 ##### Table of Contents
 
-* [Introduction](#introduction-)
-  * [About lxml](#about-lxml-)
+* [About](#about-)
 * [Setup](#setup-)
 * [Usage](#usage-)
 
 
-## Introduction [&#x219F;](#table-of-contents)
+## About [&#x219F;](#table-of-contents)
 
 lxml<sup>[1](#footnote1)</sup> is a wrapper for the Erlang community
 [erlsom](https://github.com/willemdj/erlsom) library, providing the following
@@ -55,6 +54,8 @@ Usage information is provided in the documentation:
 
 
 ---
+
+### Footnotes
 
 <a name="footnote1">1</a>: Known in some circles as the notorious Professor El Xavier Emile (A.K.A "El X. Emile"). Possible arch-enemy of [Lucha Libre LFE](https://twitter.com/elluchadorlfe).
 
