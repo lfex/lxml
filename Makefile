@@ -5,12 +5,13 @@ LFE = _build/default/lib/lfe/bin/lfe
 DOCS_DIR = $(ROOT_DIR)/docs
 GUIDE_DIR = $(DOCS_DIR)/user-guide
 GUIDE_BUILD_DIR = $(GUIDE_DIR)/build
-DOCS_PROD_DIR = $(DOCS_DIR)/master
+DOCS_PROD_DIR = $(DOCS_DIR)/gh-pages
 API_PROD_DIR = $(DOCS_PROD_DIR)/current/api
 GUIDE_PROD_DIR = $(DOCS_PROD_DIR)/current/user-guide
-SLATE_GIT_HACK = $(DOCS_DIR)/.git
 LOCAL_DOCS_HOST = localhost
 LOCAL_DOCS_PORT = 5099
+DOCKER_IMG = lfex/slate:2.10.0-ruby2.6
+CONTAINER_NAME = lfe-slate
 
 compile:
 	rebar3 compile
@@ -31,12 +32,14 @@ clean:
 clean-all: clean
 	@rebar3 lfe clean
 
-$(SLATE_GIT_HACK):
-	@ln -s $(ROOT_DIR)/.git $(DOCS_DIR)
+build-slate-image:
+	@echo "\nBuilding Slate ..."
+	@git clone git@github.com:lfe-support/slate.git
+	@cd slate && make image
 
 docs-setup:
 	@echo "\nInstalling and setting up dependencies ..."
-	@cd $(GUIDE_DIR) && bundle install
+	@docker pull $(DOCKER_IMG)
 
 docs-clean:
 	@echo "\nCleaning build directories ..."
@@ -44,11 +47,14 @@ docs-clean:
 
 docs-slate:
 	@echo
-	@cd $(GUIDE_DIR) && bundle exec middleman build --clean
+	@cd $(GUIDE_DIR) && docker run -d --rm --name $(CONTAINER_NAME) \
+	    -p 4567:4567 \
+	    -v `pwd`/build:/srv/slate/build \
+	    -v `pwd`/source:/srv/slate/source slate
 	@mkdir $(GUIDE_PROD_DIR)
 	@cp -r $(GUIDE_BUILD_DIR)/* $(GUIDE_PROD_DIR)/
 
-docs: clean docs-clean compile $(SLATE_GIT_HACK)
+docs: clean docs-clean compile
 	@echo "\nBuilding docs ...\n"
 	@make docs-slate
 
@@ -58,7 +64,7 @@ devdocs: docs
 	@echo
 	@erl -s inets -noshell -eval 'inets:start(httpd,[{server_name,"devdocs"},{document_root, "$(DOCS_PROD_DIR)"},{server_root, "$(DOCS_PROD_DIR)"},{port, $(LOCAL_DOCS_PORT)},{mime_types,[{"html","text/html"},{"htm","text/html"},{"js","text/javascript"},{"css","text/css"},{"gif","image/gif"},{"jpg","image/jpeg"},{"jpeg","image/jpeg"},{"png","image/png"}]}]).'
 
-setup-temp-repo: $(SLATE_GIT_HACK)
+setup-temp-repo:
 	@echo "\nSetting up temporary git repos for gh-pages ...\n"
 	@rm -rf $(DOCS_PROD_DIR)/.git $(DOCS_PROD_DIR)/*/.git
 	@cd $(DOCS_PROD_DIR) && git init
