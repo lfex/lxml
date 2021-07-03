@@ -13,40 +13,31 @@
 
 * [Introduction](#introduction-)
   * [About lxml](#about-lxml-)
-* [Installation](#installation-)
+* [Setup](#setup-)
 * [Usage](#usage-)
 
 
 ## Introduction [&#x219F;](#table-of-contents)
 
-lxml, or as it is better known, Professor El Xavier Emile (A.K.A "El X. Emile"),
-is a wrapper for the Erlang community's
+lxml<sup>[1](#footnote1)</sup> is a wrapper for the Erlang community
 [erlsom](https://github.com/willemdj/erlsom) library, providing the following
 additional features:
 
-1. Lispy naming conventions via [LFE](https://github.com/rvirding/lfe) and
-   [kla](https://github.com/billosys/kla), and
+1. Lispy naming conventions via [LFE][lfe], and
 2. Utility functions for easily accessing parsed XML data
-   (e.g., ``map``, ``get-in``, ``get-linked``, &c.).
+   (e.g., `map`, `get-in`, `get-linked`, &c.).
 
 Both of these are discussed more in the lxml docs (see below for the link).
 
 
-## Installation [&#x219F;](#table-of-contents)
+## Setup [&#x219F;](#table-of-contents)
 
 Just add it to your ``rebar.config`` deps:
 
 ```erlang
   {deps, [
-    ...
-    {lxml, ".*", {git, "git@github.com:lfex/lxml.git", {tag, "x.y.z"}}},
-    ...]}.
-```
-
-Or, if you use ``lfe.config``:
-
-```lisp
-#(project (#(deps (#("oubiwann/lxml" "master")))))
+    {lxml, "0.3.0"}
+  ]}.
 ```
 
 And then do the usual:
@@ -62,6 +53,10 @@ Usage information is provided in the documentation:
 
 * [User Guide](http://lfex.github.io/lxml/current/user-guide)
 
+
+---
+
+<a name="footnote1">1</a>: Known in some circles as the notorious Professor El Xavier Emile (A.K.A "El X. Emile"),
 
 [//]: ---Named-Links---
 
