@@ -6,12 +6,10 @@ DOCS_DIR = $(ROOT_DIR)/docs
 GUIDE_DIR = $(DOCS_DIR)/user-guide
 GUIDE_BUILD_DIR = $(GUIDE_DIR)/build
 DOCS_PROD_DIR = $(DOCS_DIR)/gh-pages
-API_PROD_DIR = $(DOCS_PROD_DIR)/current/api
 GUIDE_PROD_DIR = $(DOCS_PROD_DIR)/current/user-guide
 LOCAL_DOCS_HOST = localhost
 LOCAL_DOCS_PORT = 5099
 DOCKER_IMG = lfex/slate:2.10.0-ruby2.6
-CONTAINER_NAME = lfe-slate
 
 compile:
 	rebar3 compile
@@ -48,19 +46,21 @@ docs-setup:
 
 docs-clean:
 	@echo "\nCleaning build directories ..."
-	@rm -rf $(GUIDE_BUILD_DIR) $(API_PROD_DIR) $(GUIDE_PROD_DIR)
+	@rm -rf $(GUIDE_BUILD_DIR) $(GUIDE_PROD_DIR)
 
 docs-slate:
 	@echo
-	@cd $(GUIDE_DIR) && docker run -d --rm --name $(CONTAINER_NAME) \
+	@cd $(GUIDE_DIR) && docker run \
+	    -i \
 	    -p 4567:4567 \
 	    -v `pwd`/build:/srv/slate/build \
-	    -v `pwd`/source:/srv/slate/source slate
+	    -v `pwd`/source:/srv/slate/source \
+	    -t $(DOCKER_IMG)
 	@mkdir $(GUIDE_PROD_DIR)
 	@cp -r $(GUIDE_BUILD_DIR)/* $(GUIDE_PROD_DIR)/
 
 docs: clean docs-clean compile
-	@echo "\nBuilding docs ...\n"
+	@echo "\nBuilding docs ..."
 	@make docs-slate
 
 devdocs: docs
