@@ -1,7 +1,7 @@
 %% -*- erlang -*-
 {application, lxml, [
     %% A quick description of the application.
-    {description, "An LFE XML Library"},
+    {description, "An LFE XML parser / wrapper for erlsom*"},
 
     %% The version of the application
     {vsn, "0.3.0-dev"},
@@ -22,7 +22,8 @@
         stdlib,
         kernel,
         ssl,
-        inets
+        inets,
+        public_key
     ]},
 
     %% OTP application loader will load, but not start, included apps. Again
@@ -32,5 +33,15 @@
 
     %% configuration parameters similar to those in the config file specified
     %% on the command line. can be fetched with gas:get_env
-    {env, []}
+    {env, []},
+
+    %% Package metadata:
+    {pkg_name, lxml},
+    {maintainers, ["Duncan McGreggor"]},
+    {licenses, ["Apache-2"]},
+    {links, [
+        {"GitHub", "https://github.com/lfex/lxml"},
+        {"Hex", "https://hex.pm/packages/lxml"}
+    ]},
+    {exclude_files, ["priv/images/*"]}
 ]}.
