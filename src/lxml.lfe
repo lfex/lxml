@@ -4,10 +4,10 @@
 ;;; API functions
 
 (defun start ()
-  (inets:start))
+  (application:ensure_all_started 'lxml))
 
 (defun stop ()
-  (inets:stop))
+  (application:stop 'lxml))
 
 (defun parse (arg)
   (parse arg '()))
@@ -149,6 +149,12 @@
   "The identity function."
   x)
 
+(defun version ()
+  (lxml-util:version))
+
+(defun versions ()
+  (lxml-util:versions))
+
 ;;; Supporting private functions
 
 (defun parse-body (body options)
@@ -180,9 +186,3 @@
   ((`#(,key ,val)) (when (is_list key))
    `#(,(list_to_atom key) ,val))
   ((x) x))
-
-(defun version ()
-  (lxml-util:version))
-
-(defun versions ()
-  (lxml-util:versions))

@@ -13,6 +13,6 @@ Note that this library has not wrapped all of erlsom; only <code>erlsom:simple_f
 
 <aside class="warning">
 If you find any bugs or would like to have features added,
-<a href="https://github.com/oubiwann/lxml/issues/new">let us know</a>
+<a href="https://github.com/lfex/lxml/issues/new">let us know</a>
 or send along a PR with your implementation of it!
 </aside>

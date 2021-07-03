@@ -1,22 +1,22 @@
 # The API
 
-## ``start``
+## `start`
 
 > Starting up lxml for parsing URLs and following media links:
 
 ```cl
-> (lxml:start)
-(#(inets ok) #(ssl ok) #(lhttpc ok) #(lhc ok) #(lxml ok))
+lfe> (lxml:start)
+#(ok (lxml))
 ```
 
 This function simply starts the lhc LFE HTTP client. If you plan on parsing XML
-from URLs or if you want to be able to call the ``get-linked`` function, you
-will first need to call ``start``.
+from URLs or if you want to be able to call the `get-linked` function, you
+will first need to call `start`.
 
-## ``parse``
+## `parse`
 
 > For this and subsequent API functions, we will use the following
-sample data, part of the lxml codebase and available in ``./test/data.xml``:
+sample data, part of the lxml codebase and available in `./test/data.xml`:
 
 ```xml
 <life>
@@ -40,30 +40,33 @@ sample data, part of the lxml codebase and available in ``./test/data.xml``:
 > Parse the data normally:
 
 ```cl
-> (lxml:parse #(file "test/data.xml"))
+lfe> (lxml:start)
+#(ok (lxml))
+lfe> (lxml:parse #(file "test/data.xml"))
 (#(tag "life")
  #(attr ())
  #(content
-   #(life ()
-     (#(bacteria
-        (#(division "domain"))
-        (#(bacterium () ("spirochetes"))
-         #(bacterium () ("proteobacteria"))
-         #(bacterium () ("cyanobacteria"))))
-      #(archaea (#(division "domain")) (#(archaum () ())))
-      #(eukaryota
-        (#(division "domain"))
-        (#(eukaryotum () ("slime molds"))
-         #(eukaryotum () ("fungi"))
-         #(eukaryotum () ("plants"))
-         #(eukaryotum () ("animals")))))))
- #(tail "\n"))
+   #("life"
+     ()
+     (#("bacteria"
+        (#("division" "domain"))
+        (#("bacterium" () ("spirochetes"))
+         #("bacterium" () ("proteobacteria"))
+         #("bacterium" () ("cyanobacteria"))))
+      #("archaea" (#("division" "domain")) (#("archaum" () ())))
+      #("eukaryota"
+        (#("division" "domain"))
+        (#("eukaryotum" () ("slime molds"))
+         #("eukaryotum" () ("fungi"))
+         #("eukaryotum" () ("plants"))
+         #("eukaryotum" () ("animals")))))))
+ #(tail "\n\n"))
 ```
 
 > Parse the data, requesting a raw result:
 
 ```cl
-> (lxml:parse #(file "data.xml") '(#(result-type raw)))
+lfe> (lxml:parse #(file "test/data.xml") '(#(result-type raw)))
 #(ok
   #("life"
     ()
@@ -79,17 +82,17 @@ sample data, part of the lxml codebase and available in ``./test/data.xml``:
         #("eukaryotum" () ("fungi"))
         #("eukaryotum" () ("plants"))
         #("eukaryotum" () ("animals"))))))
-  "\n")
+  "\n\n")
 ```
 
 When parsing the data normally, a 4-element property list is returned.
 The keys and values of the proplist are as follows:
 
-* ``tag`` - the top-level tag of the parsed XML data
-* ``attr`` - the attributes of the top-level tag
-* ``content`` - the content of the top-level tag; this includes the full
+* `tag` - the top-level tag of the parsed XML data
+* `attr` - the attributes of the top-level tag
+* `content` - the content of the top-level tag; this includes the full
   XML result, minus any trailing characters
-* ``tail`` - any trailing characters
+* `tail` - any trailing characters
 
 Note that XML tags with no attributes simply have an empty list in the
 "attrributes" portion of the parsed results.
@@ -100,35 +103,36 @@ When asking for raw results, the XML data is passed directly to erlsom and the
 result is returned without any filtering. The data from erlsom is returned as
 a 2-tuple where the elements of the tuple are as follows:
 
-* status - either ``ok``or ``error``
+* status - either `ok`or `error`
 * result - either the parsed data structure or an error message
 
-## ``get-data``
+## `get-data`
 
-> By default, ``get-data`` operates on a parsed result set:
+> By default, `get-data` operates on a parsed result set:
 
 ```cl
-> (lxml:get-data (lxml:parse #(file "data.xml")))
-#(life ()
-  (#(bacteria
-     (#(division "domain"))
-     (#(bacterium () ("spirochetes"))
-      #(bacterium () ("proteobacteria"))
-      #(bacterium () ("cyanobacteria"))))
-   #(archaea (#(division "domain")) (#(archaum () ())))
-   #(eukaryota
-     (#(division "domain"))
-     (#(eukaryotum () ("slime molds"))
-      #(eukaryotum () ("fungi"))
-      #(eukaryotum () ("plants"))
-      #(eukaryotum () ("animals"))))))
+lfe> (lxml:get-data (lxml:parse #(file "test/data.xml")))
+#("life"
+  ()
+  (#("bacteria"
+     (#("division" "domain"))
+     (#("bacterium" () ("spirochetes"))
+      #("bacterium" () ("proteobacteria"))
+      #("bacterium" () ("cyanobacteria"))))
+   #("archaea" (#("division" "domain")) (#("archaum" () ())))
+   #("eukaryota"
+     (#("division" "domain"))
+     (#("eukaryotum" () ("slime molds"))
+      #("eukaryotum" () ("fungi"))
+      #("eukaryotum" () ("plants"))
+      #("eukaryotum" () ("animals"))))))
 ```
 
-> However, by passing options, one may call ``get-data`` in the following,
+> However, by passing options, one may call `get-data` in the following,
 more concise manner:
 
 ```cl
-> (lxml:get-data #(file "data.xml"))
+lfe> (lxml:get-data #(file "test/data.xml"))
 #(life ()
   (#(bacteria ...)))
 ```
@@ -136,7 +140,7 @@ more concise manner:
 > Or:
 
 ```cl
-> (lxml:get-data #(url "http://example.com/data.xml"))
+lfe> (lxml:get-data #(url "http://example.com/data.xml"))
 #(life ()
   (#(bacteria ...)))
 ```
@@ -144,84 +148,91 @@ more concise manner:
 > Or:
 
 ```cl
-> (lxml:get-data #(xml "<life> ... </life>"))
+lfe> (lxml:get-data #(xml "<life> ... </life>"))
 #(life ()
   (#(bacteria ...)))
 ```
 
-The ``get-data`` function is provided as a convenience, as more often than not,
-one cares about the ``#(content ...)`` tuple in the parsed property list, and
-this is what ``get-data`` returns.
+The `get-data` function is provided as a convenience, as more often than not,
+one cares about the `#(content ...)` tuple in the parsed property list, and
+this is what `get-data` returns.
 
-``get-data`` also provides a convenience wrapper around parse: if you provide
+`get-data` also provides a convenience wrapper around parse: if you provide
 a tuple with any of the following keys, the parse command is called under
 the covers, alleviating the user from any need to make that call. The value
 keys are:
 
-* ``file``
-* ``url``
-* ``xml``
+* `file`
+* `url`
+* `xml`
 
-## ``get-in``
+## `get-in`
 
 > First let's set some data:
 
 ```cl
-> (set data (lxml:get-data #(file "data.xml")))
-#(life ()
+lfe> (set data (lxml:get-data #(file "test/data.xml")))
 ```
 
-> Using ``get-in`` trivially, with one key:
+> Using `get-in` trivially, with one key:
 
 ```cl
-> (lxml:get-in '(life) data)
-(#(bacteria
-   (#(division "domain"))
-   (#(bacterium () ("spirochetes"))
-    #(bacterium () ("proteobacteria"))
-    #(bacterium () ("cyanobacteria"))))
- #(archaea (#(division "domain")) (#(archaum () ())))
- #(eukaryota
-   (#(division "domain"))
-   (#(eukaryotum () ("slime molds"))
-    #(eukaryotum () ("fungi"))
-    #(eukaryotum () ("plants"))
-    #(eukaryotum () ("animals")))))
+lfe> (lxml:get-in '("life") data)
+(#("bacteria"
+   (#("division" "domain"))
+   (#("bacterium" () ("spirochetes"))
+    #("bacterium" () ("proteobacteria"))
+    #("bacterium" () ("cyanobacteria"))))
+ #("archaea" (#("division" "domain")) (#("archaum" () ())))
+ #("eukaryota"
+   (#("division" "domain"))
+   (#("eukaryotum" () ("slime molds"))
+    #("eukaryotum" () ("fungi"))
+    #("eukaryotum" () ("plants"))
+    #("eukaryotum" () ("animals")))))
 ```
 
-> Using ``get-in`` with two keys:
+> Using `get-in` with two keys:
 
 ```cl
-> (lxml:get-in '(life bacteria) data)
-(#(bacterium () ("spirochetes"))
- #(bacterium () ("proteobacteria"))
- #(bacterium () ("cyanobacteria")))
+lfe> (lxml:get-in '("life" "bacteria") data)
+(#("bacterium" () ("spirochetes"))
+ #("bacterium" () ("proteobacteria"))
+ #("bacterium" () ("cyanobacteria")))
 ```
 
-> Using ``get-in`` with three:
+> Using `get-in` with three:
 
 ```cl
-> (lxml:get-in '(life bacteria bacterium) data)
+lfe> (lxml:get-in '("life" "bacteria" "bacterium") data)
 "spirochetes"
 ```
 
-> Or, to get the third bacterium:
+> For a series of elements that share the same name, the first is returned by default. As such, the above is identical to this:
+
+``` cl
+lfe> (lxml:get-in '("life" "bacteria" 1) data)
+"spirochetes"
+
+```
+
+> To get the third bacterium:
 
 ```cl
-> (lxml:get-in '(life bacteria 3))
+lfe> (lxml:get-in '("life" "bacteria" 3) data)
 "cyanobacteria"
 ```
 
-> For each of these, we could also have used ``file``, ``url``, or ``xml``:
+> For each of these, we could also have used `file`, `url`, or `xml`:
 
 ```cl
-> (lxml:get-in '(life bacteria) #(file "data.xml"))
+> (lxml:get-in '("life" "bacteria") #(file "test/data.xml"))
 (#(bacterium () ("spirochetes"))
  #(bacterium () ("proteobacteria"))
  #(bacterium () ("cyanobacteria")))
 ```
 
-``get-in`` is inspired by the Clojure function of the same name and provide
+`get-in` is inspired by the Clojure function of the same name and provide
 an easy means of extracting data nested to any depth. A list of keys is
 provided, as well as parsed XML data. It is expected that each subsequent key
 frerences a child element. The parsed XML tree is walked until the last
@@ -231,28 +242,28 @@ Keys may either be atoms (keys in the proplist) or integers (1-based indices).
 This allows for situations when sibling elements have the same name and
 can only be distinguished by index.
 
-As you may have guessed, ``get-in`` provides the same optional use as that
-of ``get-data`` and supports the same tuple keys:
+As you may have guessed, `get-in` provides the same optional use as that
+of `get-data` and supports the same tuple keys:
 
-* ``file``
-* ``url``
-* ``xml``
+* `file`
+* `url`
+* `xml`
 
-## ``get-attr-in``
-
-TBD
-
-## ``get-linked``
+## `get-attr-in`
 
 TBD
 
-## ``map``
+## `get-linked`
+
+TBD
+
+## `map`
 
 > Get the raw data of our sample XML file, without any of lxml's
   post-parse-processing:
 
 ```cl
-> (set `#(ok ,data ,_) (lxml:parse #(file "data.xml") '(#(result-type raw))))
+lfe> (set `#(ok ,data ,_) (lxml:parse #(file "test/data.xml") '(#(result-type raw))))
 #(ok
   #("life"
     ()
@@ -269,14 +280,13 @@ TBD
         #("eukaryotum" () ("plants"))
         #("eukaryotum" () ("animals"))))))
   "\n")
->
 ```
 
-> Using ``lxml:map/2``, we can modify the content of all tags. For example,
+> Using `lxml:map/2`, we can modify the content of all tags. For example,
   the following will uppercase all the content data:
 
 ```cl
-> (lxml:map #'string:to_upper/1 data)
+lfe> (lxml:map #'string:to_upper/1 data)
 #("life"
   ()
   (#("bacteria"
@@ -294,12 +304,12 @@ TBD
 ```
 
 > In the raw data we got back, all the tags and attirbute keys are all strings.
-  What if we'd like to convert those to atoms? We can use ``lxml:map/4`` and
+  What if we'd like to convert those to atoms? We can use ``xml:map/4` and
   just use the identify function for processing the content, since we don't
   want that modified:
 
 ```cl
-> (lxml:map #'list_to_atom/1 #'lxml:key->atom/1 #'lxml:ident/1 data)
+lfe> (lxml:map #'list_to_atom/1 #'lxml:key->atom/1 #'lxml:ident/1 data)
 #(life ()
   (#(bacteria
      (#(division "domain"))
@@ -315,10 +325,10 @@ TBD
       #(eukaryotum () ("animals"))))))
 ```
 
-``map`` functions typically operate over lists of arbitrary data; the function
-passed to the ``map`` function is what is expected to know something about the
-list data. The ``map`` functions in lxml are significantly different than
-standard ``map`` functions in the following ways:
+`map` functions typically operate over lists of arbitrary data; the function
+passed to the `map` function is what is expected to know something about the
+list data. The `map` functions in lxml are significantly different than
+standard `map` functions in the following ways:
 
 * They operate on nested data,
 * They understand that the lists will contain either the 3-tuple of parsed XML
@@ -326,11 +336,11 @@ standard ``map`` functions in the following ways:
 * There are potentially three functions one may pass: on to operate on the tag,
   one on the attributes, and another on the contents.
 
-As a result of the last bullet point, ``lxml:map`` comes in three arities:
+As a result of the last bullet point, `lxml:map` comes in three arities:
 
-* ``lxml:map/2`` - takes a content-manipulating function and parsed XML data
-* ``lxml:map/3`` - takes an attribute-manipulating function,
+* `xml:map/2` - takes a content-manipulating function and parsed XML data
+* `lxml:map/3` - takes an attribute-manipulating function,
     a content-manipulating function, and parsed XML data
-* ``lxml:map/4`` - takes s tag-manipulating function,
+* `lxml:map/4` - takes s tag-manipulating function,
     an attribute-manipulating function,
     a content-manipulating function, and parsed XML data

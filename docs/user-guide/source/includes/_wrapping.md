@@ -16,18 +16,18 @@ below.
 > To demonstrate string and binary inputs, let's define some data:
 
 ```cl
-> (set data-1 "<xml>data</xml>")
+lfe> (set data-1 "<xml>data</xml>")
 "<xml>data</xml>"
-> (set data-2 (binary "<xml>data</xml>"))
-#B(60 120 109 108 62 100 97 116 97 60 47 120 109 108 62)
+lfe> (set data-2 (binary "<xml>data</xml>"))
+#"<xml>data</xml>"
 ```
 
 > Now we can parse these and show that lxml (via erlsom) handles both string and
 > binary input the same:
 
 ```cl
-> (=:= (lxml:parse data-1)
-       (lxml:parse data-2))
+lfe> (=:= (lxml:parse data-1)
+          (lxml:parse data-2))
 true
 ```
 
