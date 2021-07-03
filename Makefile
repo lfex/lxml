@@ -6,6 +6,7 @@ DOCS_DIR = $(ROOT_DIR)/docs
 GUIDE_DIR = $(DOCS_DIR)/user-guide
 GUIDE_BUILD_DIR = $(GUIDE_DIR)/build
 DOCS_PROD_DIR = $(DOCS_DIR)/gh-pages
+SUBMODULE_DOCS = docs/gh-pages
 GUIDE_PROD_DIR = $(DOCS_PROD_DIR)/current/user-guide
 LOCAL_DOCS_HOST = localhost
 LOCAL_DOCS_PORT = 5099
@@ -36,7 +37,7 @@ build-slate-image:
 	@cd slate && make image
 
 $(DOCS_PROD_DIR):
-	git submodule add -b gh-pages `git remote get-url --push origin` $(DOCS_PROD_DIR)
+	git submodule add -b gh-pages `git remote get-url --push origin` $(SUBMODULE_DOCS)
 
 gh-pages: $(DOCS_PROD_DIR)
 
