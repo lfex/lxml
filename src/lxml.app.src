@@ -4,7 +4,7 @@
     {description, "An LFE XML parser / wrapper for erlsom*"},
 
     %% The version of the application
-    {vsn, "0.3.0"},
+    {vsn, "0.4.0-dev"},
 
     %% All modules used by the application.
     {modules, [
