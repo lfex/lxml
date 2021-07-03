@@ -46,6 +46,22 @@
 (defun test-data-4 ()
   `#(key1 ,(test-data-2)))
 
+(defun test-data-5 ()
+  #("life"
+    ()
+    (#("bacteria"
+       (#("division" "domain"))
+       (#("bacterium" () ("spirochetes"))
+        #("bacterium" () ("proteobacteria"))
+        #("bacterium" () ("cyanobacteria"))))
+     #("archaea" (#("division" "domain")) (#("archaum" () ())))
+     #("eukaryota"
+       (#("division" "domain"))
+       (#("eukaryotum" () ("slime molds"))
+        #("eukaryotum" () ("fungi"))
+        #("eukaryotum" () ("plants"))
+        #("eukaryotum" () ("animals")))))))
+
 ;;; actual tests
 
 (deftest get-data
@@ -71,7 +87,7 @@
               '(level1-3 level2-2 level3-1 level4-3)
               (test-data-2))))
 
-(deftest get-in
+(deftest get-in-3-tuple
   ;; test just the standard 3-tuple data structure
   (is-equal "thing"
             (lxml:get-in '(level1-1) (test-data-2)))
@@ -83,7 +99,9 @@
                               (test-data-2)))
   (is-equal "hat"
             (lxml:get-in '(level1-3 level2-2 level3-1 level4-3)
-                              (test-data-2)))
+                         (test-data-2))))
+
+(deftest get-in-3-tuple-in-proplist
   ;; test the 3-tuple data structure nested inside a proplist
   (is-equal "thing"
             (lxml:get-in '(key3 level1-1) (test-data-3)))
@@ -95,7 +113,9 @@
                               (test-data-3)))
   (is-equal "hat"
             (lxml:get-in '(key3 level1-3 level2-2 level3-1 level4-3)
-                              (test-data-3)))
+                         (test-data-3))))
+
+(deftest get-in-tuples-in-tuple
   ;; test a list of 3-tuples in a tuple (common in parsed results)
   (is-equal "thing"
             (lxml:get-in '(key1 level1-1) (test-data-4)))
@@ -108,3 +128,11 @@
   (is-equal "hat"
             (lxml:get-in '(key1 level1-3 level2-2 level3-1 level4-3)
                               (test-data-4))))
+
+(deftest get-in-tag-attr-content-tuple
+  (is-equal #("archaum" () ())
+            (lxml:get-in '("life" "archaea") (test-data-5)))
+  (is-equal "spirochetes"
+            (lxml:get-in '("life" "bacteria" 1) (test-data-5)))
+  (is-equal "cyanobacteria"
+            (lxml:get-in '("life" "bacteria" 3) (test-data-5))))
