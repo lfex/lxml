@@ -56,7 +56,7 @@ Usage information is provided in the documentation:
 
 ---
 
-<a name="footnote1">1</a>: Known in some circles as the notorious Professor El Xavier Emile (A.K.A "El X. Emile"),
+<a name="footnote1">1</a>: Known in some circles as the notorious Professor El Xavier Emile (A.K.A "El X. Emile"). Possible arch-enemy of [Lucha Libre LFE](https://twitter.com/elluchadorlfe).
 
 [//]: ---Named-Links---
 
