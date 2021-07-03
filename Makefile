@@ -16,10 +16,10 @@ compile:
 	rebar3 compile
 
 check:
-	@rebar3 as test eunit
+	@rebar3 as test lfe ltest -tall
 
 repl: compile
-	@$(LFE)
+	rebar3 lfe repl
 
 shell:
 	@rebar3 shell
@@ -42,10 +42,6 @@ docs-clean:
 	@echo "\nCleaning build directories ..."
 	@rm -rf $(GUIDE_BUILD_DIR) $(API_PROD_DIR) $(GUIDE_PROD_DIR)
 
-docs-lodox:
-	@echo
-	@rebar3 as docs lfe lodox
-
 docs-slate:
 	@echo
 	@cd $(GUIDE_DIR) && bundle exec middleman build --clean
@@ -54,7 +50,6 @@ docs-slate:
 
 docs: clean docs-clean compile $(SLATE_GIT_HACK)
 	@echo "\nBuilding docs ...\n"
-	@-make docs-lodox
 	@make docs-slate
 
 devdocs: docs
