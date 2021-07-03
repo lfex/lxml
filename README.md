@@ -35,15 +35,15 @@ Both of these are discussed more in the lxml docs (see below for the link).
 Just add it to your ``rebar.config`` deps:
 
 ```erlang
-  {deps, [
+{deps, [
     {lxml, "0.3.0"}
-  ]}.
+]}.
 ```
 
 And then do the usual:
 
 ```bash
-    $ rebar3 compile
+$ rebar3 compile
 ```
 
 
