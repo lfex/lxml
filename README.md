@@ -1,12 +1,13 @@
 # lxml
 
-<img src="resources/images/professor-xavier-emile.png" />
+[![Build Status][gh-actions-badge]][gh-actions]
+[![LFE Versions][lfe badge]][lfe]
+[![Erlang Versions][erlang badge]][versions]
+[![Tags][github tags badge]][github tags]
 
-*An LFE XML-parsing wrapper for erlsom, with utility functions*
+*An LFE XML parser / wrapper for erlsom*
 
-Note that for genereating XML in LFE (using S-expressions), we recommend
-[exemplar](https://github.com/lfex/exemplar). The intended use for lxml is
-the *parsing* of XML documents.
+[![Project logo][logo]][logo]
 
 ##### Table of Contents
 
@@ -60,4 +61,23 @@ And then do the usual:
 Usage information is provided in the documentation:
 
 * [User Guide](http://lfex.github.io/lxml/current/user-guide)
-* [API Reference](http://lfex.github.io/lxml/current/api)
+
+
+[//]: ---Named-Links---
+
+[org]: https://github.com/lfex
+[github]: https://github.com/lfex/lxml
+[gitlab]: https://gitlab.com/lfex/lxml
+[gh-actions-badge]: https://github.com/lfex/lxml/workflows/ci%2Fcd/badge.svg
+[gh-actions]: https://github.com/lfex/lxml/actions
+[logo]: priv/images/professor-xavier-emile.png
+[lfe]: https://github.com/lfe/lfe
+[lfe badge]: https://img.shields.io/badge/lfe-2.0-blue.svg
+[erlang badge]: https://img.shields.io/badge/erlang-19%20to%2024-blue.svg
+[versions]: https://github.com/lfex/lxml/blob/master/.github/workflows/cicd.yml
+[github tags]: https://github.com/lfex/lxml/tags
+[github tags badge]: https://img.shields.io/github/tag/lfex/lxml.svg
+[github downloads]: https://img.shields.io/github/downloads/lfex/lxml/total.svg
+[hex badge]: https://img.shields.io/hexpm/v/lxml.svg?maxAge=2592000
+[hex package]: https://hex.pm/packages/lxml
+[hex downloads]: https://img.shields.io/hexpm/dt/lxml.svg
