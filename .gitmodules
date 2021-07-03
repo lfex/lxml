@@ -1,0 +1,4 @@
+[submodule "/Users/oubiwann/lab/lfe/lxml/docs/gh-pages"]
+	path = /Users/oubiwann/lab/lfe/lxml/docs/gh-pages
+	url = git@github.com:lfex/lxml.git
+	branch = gh-pages

@@ -37,6 +37,11 @@ build-slate-image:
 	@git clone git@github.com:lfe-support/slate.git
 	@cd slate && make image
 
+$(DOCS_PROD_DIR):
+	git submodule add -b gh-pages `git remote get-url --push origin` $(DOCS_PROD_DIR)
+
+gh-pages: $(DOCS_PROD_DIR)
+
 docs-setup:
 	@echo "\nInstalling and setting up dependencies ..."
 	@docker pull $(DOCKER_IMG)
