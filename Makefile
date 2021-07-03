@@ -54,7 +54,10 @@ docs-slate:
 	    -i \
 	    -p 4567:4567 \
 	    -v `pwd`/build:/srv/slate/build \
-	    -v `pwd`/source:/srv/slate/source \
+	    -v `pwd`/source/index.html.md:/srv/slate/source/index.html.md \
+	    -v `pwd`/source/includes:/srv/slate/source/includes \
+	    -v `pwd`/source/images:/srv/slate/source/images \
+	    -v `pwd`/source/stylesheets/_variables.scss:/srv/slate/source/stylesheets/_variables.scss \
 	    -t $(DOCKER_IMG)
 	@mkdir $(GUIDE_PROD_DIR)
 	@cp -r $(GUIDE_BUILD_DIR)/* $(GUIDE_PROD_DIR)/
