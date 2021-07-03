@@ -351,9 +351,6 @@
                   <li>
                     <a href="#user-guide" class="toc-h2 toc-link" data-title="User Guide">User Guide</a>
                   </li>
-                  <li>
-                    <a href="#api-reference" class="toc-h2 toc-link" data-title="API Reference">API Reference</a>
-                  </li>
               </ul>
           </li>
       </ul>
@@ -379,7 +376,7 @@ Note that this library has not wrapped all of erlsom; only <code>erlsom:simple_f
 
 <aside class="warning">
 If you find any bugs or would like to have features added,
-<a href="https://github.com/oubiwann/lxml/issues/new">let us know</a>
+<a href="https://github.com/lfex/lxml/issues/new">let us know</a>
 or send along a PR with your implementation of it!
 </aside>
 <h1 id='wrapping-erlsom'>Wrapping erlsom</h1>
@@ -396,17 +393,17 @@ below.</p>
 <blockquote>
 <p>To demonstrate string and binary inputs, let&#39;s define some data:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">data-1</span> <span class="s">"&lt;xml&gt;data&lt;/xml&gt;"</span><span class="p">)</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">data-1</span> <span class="s">"&lt;xml&gt;data&lt;/xml&gt;"</span><span class="p">)</span>
 <span class="s">"&lt;xml&gt;data&lt;/xml&gt;"</span>
-<span class="nb">&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">data-2</span> <span class="p">(</span><span class="nv">binary</span> <span class="s">"&lt;xml&gt;data&lt;/xml&gt;"</span><span class="p">))</span>
-<span class="err">#</span><span class="nv">B</span><span class="p">(</span><span class="mi">60</span> <span class="mi">120</span> <span class="mi">109</span> <span class="mi">108</span> <span class="mi">62</span> <span class="mi">100</span> <span class="mi">97</span> <span class="mi">116</span> <span class="mi">97</span> <span class="mi">60</span> <span class="mi">47</span> <span class="mi">120</span> <span class="mi">109</span> <span class="mi">108</span> <span class="mi">62</span><span class="p">)</span>
+<span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">data-2</span> <span class="p">(</span><span class="nv">binary</span> <span class="s">"&lt;xml&gt;data&lt;/xml&gt;"</span><span class="p">))</span>
+<span class="ss">#"&lt;xml&gt;data&lt;/xml&gt;"</span>
 </code></pre></div>
 <blockquote>
 <p>Now we can parse these and show that lxml (via erlsom) handles both string and
 binary input the same:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">=:=</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="nv">data-1</span><span class="p">)</span>
-       <span class="p">(</span><span class="nv">lxml:parse</span> <span class="nv">data-2</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">=:=</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="nv">data-1</span><span class="p">)</span>
+          <span class="p">(</span><span class="nv">lxml:parse</span> <span class="nv">data-2</span><span class="p">))</span>
 <span class="nv">true</span>
 </code></pre></div>
 <p>lxml handles the following types of input:</p>
@@ -440,8 +437,8 @@ keys as atoms (with it, they are left as-is: strings).</li>
 <blockquote>
 <p>Starting up lxml for parsing URLs and following media links:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:start</span><span class="p">)</span>
-<span class="p">(</span><span class="o">#(</span><span class="nv">inets</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">ssl</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">lhttpc</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">lhc</span> <span class="nv">ok</span><span class="p">)</span> <span class="o">#(</span><span class="nv">lxml</span> <span class="nv">ok</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:start</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">ok</span> <span class="p">(</span><span class="nv">lxml</span><span class="p">))</span>
 </code></pre></div>
 <p>This function simply starts the lhc LFE HTTP client. If you plan on parsing XML
 from URLs or if you want to be able to call the <code>get-linked</code> function, you
@@ -471,29 +468,32 @@ sample data, part of the lxml codebase and available in <code>./test/data.xml</c
 <blockquote>
 <p>Parse the data normally:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:start</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">ok</span> <span class="p">(</span><span class="nv">lxml</span><span class="p">))</span>
+<span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">))</span>
 <span class="p">(</span><span class="o">#(</span><span class="nv">tag</span> <span class="s">"life"</span><span class="p">)</span>
  <span class="o">#(</span><span class="nv">attr</span> <span class="p">())</span>
  <span class="o">#(</span><span class="nv">content</span>
-   <span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
-     <span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span>
-        <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
-        <span class="p">(</span><span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
-         <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
-         <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">))))</span>
-      <span class="o">#(</span><span class="nv">archaea</span> <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span> <span class="p">(</span><span class="o">#(</span><span class="nv">archaum</span> <span class="p">()</span> <span class="p">())))</span>
-      <span class="o">#(</span><span class="nv">eukaryota</span>
-        <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
-        <span class="p">(</span><span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"slime molds"</span><span class="p">))</span>
-         <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
-         <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
-         <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">)))))))</span>
- <span class="o">#(</span><span class="nv">tail</span> <span class="s">"\n"</span><span class="p">))</span>
+   <span class="o">#(</span><span class="s">"life"</span>
+     <span class="p">()</span>
+     <span class="p">(</span><span class="o">#(</span><span class="s">"bacteria"</span>
+        <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span>
+        <span class="p">(</span><span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
+         <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
+         <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">))))</span>
+      <span class="o">#(</span><span class="s">"archaea"</span> <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span> <span class="p">(</span><span class="o">#(</span><span class="s">"archaum"</span> <span class="p">()</span> <span class="p">())))</span>
+      <span class="o">#(</span><span class="s">"eukaryota"</span>
+        <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span>
+        <span class="p">(</span><span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"slime molds"</span><span class="p">))</span>
+         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
+         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
+         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">)))))))</span>
+ <span class="o">#(</span><span class="nv">tail</span> <span class="s">"\n\n"</span><span class="p">))</span>
 </code></pre></div>
 <blockquote>
 <p>Parse the data, requesting a raw result:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"data.xml"</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="nv">result-type</span> <span class="nv">raw</span><span class="p">)))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="nv">result-type</span> <span class="nv">raw</span><span class="p">)))</span>
 <span class="o">#(</span><span class="nv">ok</span>
   <span class="o">#(</span><span class="s">"life"</span>
     <span class="p">()</span>
@@ -509,7 +509,7 @@ sample data, part of the lxml codebase and available in <code>./test/data.xml</c
         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">))))))</span>
-  <span class="s">"\n"</span><span class="p">)</span>
+  <span class="s">"\n\n"</span><span class="p">)</span>
 </code></pre></div>
 <p>When parsing the data normally, a 4-element property list is returned.
 The keys and values of the proplist are as follows:</p>
@@ -539,40 +539,41 @@ a 2-tuple where the elements of the tuple are as follows:</p>
 <blockquote>
 <p>By default, <code>get-data</code> operates on a parsed result set:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"data.xml"</span><span class="p">)))</span>
-<span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
-  <span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span>
-     <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
-     <span class="p">(</span><span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
-      <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
-      <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">))))</span>
-   <span class="o">#(</span><span class="nv">archaea</span> <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span> <span class="p">(</span><span class="o">#(</span><span class="nv">archaum</span> <span class="p">()</span> <span class="p">())))</span>
-   <span class="o">#(</span><span class="nv">eukaryota</span>
-     <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
-     <span class="p">(</span><span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"slime molds"</span><span class="p">))</span>
-      <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
-      <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
-      <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">))))))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">)))</span>
+<span class="o">#(</span><span class="s">"life"</span>
+  <span class="p">()</span>
+  <span class="p">(</span><span class="o">#(</span><span class="s">"bacteria"</span>
+     <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span>
+     <span class="p">(</span><span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
+      <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
+      <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">))))</span>
+   <span class="o">#(</span><span class="s">"archaea"</span> <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span> <span class="p">(</span><span class="o">#(</span><span class="s">"archaum"</span> <span class="p">()</span> <span class="p">())))</span>
+   <span class="o">#(</span><span class="s">"eukaryota"</span>
+     <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span>
+     <span class="p">(</span><span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"slime molds"</span><span class="p">))</span>
+      <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
+      <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
+      <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">))))))</span>
 </code></pre></div>
 <blockquote>
 <p>However, by passing options, one may call <code>get-data</code> in the following,
 more concise manner:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"data.xml"</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">))</span>
 <span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
   <span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span> <span class="o">...</span><span class="p">)))</span>
 </code></pre></div>
 <blockquote>
 <p>Or:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">url</span> <span class="s">"http://example.com/data.xml"</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">url</span> <span class="s">"http://example.com/data.xml"</span><span class="p">))</span>
 <span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
   <span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span> <span class="o">...</span><span class="p">)))</span>
 </code></pre></div>
 <blockquote>
 <p>Or:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">xml</span> <span class="s">"&lt;life&gt; ... &lt;/life&gt;"</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">xml</span> <span class="s">"&lt;life&gt; ... &lt;/life&gt;"</span><span class="p">))</span>
 <span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
   <span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span> <span class="o">...</span><span class="p">)))</span>
 </code></pre></div>
@@ -594,50 +595,56 @@ keys are:</p>
 <blockquote>
 <p>First let&#39;s set some data:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">data</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"data.xml"</span><span class="p">)))</span>
-<span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="nv">data</span> <span class="p">(</span><span class="nv">lxml:get-data</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">)))</span>
 </code></pre></div>
 <blockquote>
 <p>Using <code>get-in</code> trivially, with one key:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="nv">life</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
-<span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span>
-   <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
-   <span class="p">(</span><span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
-    <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
-    <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">))))</span>
- <span class="o">#(</span><span class="nv">archaea</span> <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span> <span class="p">(</span><span class="o">#(</span><span class="nv">archaum</span> <span class="p">()</span> <span class="p">())))</span>
- <span class="o">#(</span><span class="nv">eukaryota</span>
-   <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
-   <span class="p">(</span><span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"slime molds"</span><span class="p">))</span>
-    <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
-    <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
-    <span class="o">#(</span><span class="nv">eukaryotum</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">)))))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="s">"life"</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
+<span class="p">(</span><span class="o">#(</span><span class="s">"bacteria"</span>
+   <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span>
+   <span class="p">(</span><span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
+    <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
+    <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">))))</span>
+ <span class="o">#(</span><span class="s">"archaea"</span> <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span> <span class="p">(</span><span class="o">#(</span><span class="s">"archaum"</span> <span class="p">()</span> <span class="p">())))</span>
+ <span class="o">#(</span><span class="s">"eukaryota"</span>
+   <span class="p">(</span><span class="o">#(</span><span class="s">"division"</span> <span class="s">"domain"</span><span class="p">))</span>
+   <span class="p">(</span><span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"slime molds"</span><span class="p">))</span>
+    <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"fungi"</span><span class="p">))</span>
+    <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
+    <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">)))))</span>
 </code></pre></div>
 <blockquote>
 <p>Using <code>get-in</code> with two keys:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="nv">life</span> <span class="nv">bacteria</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
-<span class="p">(</span><span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
- <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
- <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">)))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="s">"life"</span> <span class="s">"bacteria"</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
+<span class="p">(</span><span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
+ <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
+ <span class="o">#(</span><span class="s">"bacterium"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">)))</span>
 </code></pre></div>
 <blockquote>
 <p>Using <code>get-in</code> with three:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="nv">life</span> <span class="nv">bacteria</span> <span class="nv">bacterium</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="s">"life"</span> <span class="s">"bacteria"</span> <span class="s">"bacterium"</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
 <span class="s">"spirochetes"</span>
 </code></pre></div>
 <blockquote>
-<p>Or, to get the third bacterium:</p>
+<p>For a series of elements that share the same name, the first is returned by default. As such, the above is identical to this:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="nv">life</span> <span class="nv">bacteria</span> <span class="mi">3</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="s">"life"</span> <span class="s">"bacteria"</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
+<span class="s">"spirochetes"</span>
+
+</code></pre></div>
+<blockquote>
+<p>To get the third bacterium:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="s">"life"</span> <span class="s">"bacteria"</span> <span class="mi">3</span><span class="p">)</span> <span class="nv">data</span><span class="p">)</span>
 <span class="s">"cyanobacteria"</span>
 </code></pre></div>
 <blockquote>
 <p>For each of these, we could also have used <code>file</code>, <code>url</code>, or <code>xml</code>:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="nv">life</span> <span class="nv">bacteria</span><span class="p">)</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"data.xml"</span><span class="p">))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:get-in</span> <span class="o">'</span><span class="p">(</span><span class="s">"life"</span> <span class="s">"bacteria"</span><span class="p">)</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">))</span>
 <span class="p">(</span><span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"spirochetes"</span><span class="p">))</span>
  <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"proteobacteria"</span><span class="p">))</span>
  <span class="o">#(</span><span class="nv">bacterium</span> <span class="p">()</span> <span class="p">(</span><span class="s">"cyanobacteria"</span><span class="p">)))</span>
@@ -669,7 +676,7 @@ of <code>get-data</code> and supports the same tuple keys:</p>
 <p>Get the raw data of our sample XML file, without any of lxml&#39;s
   post-parse-processing:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="o">`#(</span><span class="nv">ok</span> <span class="o">,</span><span class="nv">data</span> <span class="o">,</span><span class="nv">_</span><span class="p">)</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"data.xml"</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="nv">result-type</span> <span class="nv">raw</span><span class="p">))))</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nb">set</span> <span class="o">`#(</span><span class="nv">ok</span> <span class="o">,</span><span class="nv">data</span> <span class="o">,</span><span class="nv">_</span><span class="p">)</span> <span class="p">(</span><span class="nv">lxml:parse</span> <span class="o">#(</span><span class="nv">file</span> <span class="s">"test/data.xml"</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="o">#(</span><span class="nv">result-type</span> <span class="nv">raw</span><span class="p">))))</span>
 <span class="o">#(</span><span class="nv">ok</span>
   <span class="o">#(</span><span class="s">"life"</span>
     <span class="p">()</span>
@@ -686,13 +693,12 @@ of <code>get-data</code> and supports the same tuple keys:</p>
         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"plants"</span><span class="p">))</span>
         <span class="o">#(</span><span class="s">"eukaryotum"</span> <span class="p">()</span> <span class="p">(</span><span class="s">"animals"</span><span class="p">))))))</span>
   <span class="s">"\n"</span><span class="p">)</span>
-<span class="nb">&gt;</span>
 </code></pre></div>
 <blockquote>
 <p>Using <code>lxml:map/2</code>, we can modify the content of all tags. For example,
   the following will uppercase all the content data:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:map</span> <span class="nf">#'</span><span class="nv">string:to_upper/1</span> <span class="nv">data</span><span class="p">)</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:map</span> <span class="nf">#'</span><span class="nv">string:to_upper/1</span> <span class="nv">data</span><span class="p">)</span>
 <span class="o">#(</span><span class="s">"life"</span>
   <span class="p">()</span>
   <span class="p">(</span><span class="o">#(</span><span class="s">"bacteria"</span>
@@ -710,11 +716,11 @@ of <code>get-data</code> and supports the same tuple keys:</p>
 </code></pre></div>
 <blockquote>
 <p>In the raw data we got back, all the tags and attirbute keys are all strings.
-  What if we&#39;d like to convert those to atoms? We can use <code>lxml:map/4</code> and
+  What if we&#39;d like to convert those to atoms? We can use `<code>xml:map/4</code> and
   just use the identify function for processing the content, since we don&#39;t
   want that modified:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">lxml:map</span> <span class="nf">#'</span><span class="nv">list_to_atom/1</span> <span class="nf">#'</span><span class="nv">lxml:key-&gt;atom/1</span> <span class="nf">#'</span><span class="nv">lxml:ident/1</span> <span class="nv">data</span><span class="p">)</span>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">lxml:map</span> <span class="nf">#'</span><span class="nv">list_to_atom/1</span> <span class="nf">#'</span><span class="nv">lxml:key-&gt;atom/1</span> <span class="nf">#'</span><span class="nv">lxml:ident/1</span> <span class="nv">data</span><span class="p">)</span>
 <span class="o">#(</span><span class="nv">life</span> <span class="p">()</span>
   <span class="p">(</span><span class="o">#(</span><span class="nv">bacteria</span>
      <span class="p">(</span><span class="o">#(</span><span class="nv">division</span> <span class="s">"domain"</span><span class="p">))</span>
@@ -745,7 +751,7 @@ one on the attributes, and another on the contents.</li>
 <p>As a result of the last bullet point, <code>lxml:map</code> comes in three arities:</p>
 
 <ul>
-<li><code>lxml:map/2</code> - takes a content-manipulating function and parsed XML data</li>
+<li><code>xml:map/2</code> - takes a content-manipulating function and parsed XML data</li>
 <li><code>lxml:map/3</code> - takes an attribute-manipulating function,
 a content-manipulating function, and parsed XML data</li>
 <li><code>lxml:map/4</code> - takes s tag-manipulating function,
@@ -753,19 +759,13 @@ an attribute-manipulating function,
 a content-manipulating function, and parsed XML data</li>
 </ul>
 <h1 id='previous-versions'>Previous Versions</h1><h2 id='user-guide'>User Guide</h2>
-<p>The User Guide is available for versions 0.0.1 and later:</p>
+<p>The User Guide is available for the following versions:</p>
 
 <ul>
 <li><a href="../user-guide/">Current</a></li>
-<li><a href="../user-guide/">0.1.0</a></li>
+<li><a href="../user-guide/">0.3.0</a></li>
+<li><a href="../../0.1.0/user-guide/">0.1.0</a></li>
 <li><a href="../../0.0.1/user-guide/">0.0.1</a></li>
-</ul>
-<h2 id='api-reference'>API Reference</h2>
-<p>The API Documentation is available for versions 0.1.0 and later:</p>
-
-<ul>
-<li><a href="../api/">Current</a></li>
-<li><a href="../api/">0.1.0</a></li>
 </ul>
 
       </div>
